@@ -1,0 +1,21 @@
+1. readme.md
+
+1.1 Basis / algemeen
+
+1.2 Per model ook achtergrondinformatie
+
+
+
+2. main.py
+
+2.1 Basis class incl data inladen
+
+2.2 Per model functie
+    - 1e workshop: Emiel
+    - 2e: Joris
+    - 3e: Emiel
+    - 4e: Joris
+
+
+
+3. jupyter-notebook (komt later)
