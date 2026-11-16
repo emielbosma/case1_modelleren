@@ -71,7 +71,7 @@ class DynamicModelling:
         plt.show()
 
 def main():
-    pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
+    pd_df = pd.read_csv('case1_modelleren/generated_data/sir_dummy_dataset.csv')
     model = DynamicModelling(pd_df)
     model.plot_SIR()
 
