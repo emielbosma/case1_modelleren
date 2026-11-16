@@ -3,12 +3,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from IPython.display import display
 import numpy as np
+import math
 
 class DynamicModelling:
     def __init__(self, data):
         self.data = data
-        # Subject_ID (str) Group (str) Time_Days (int) Tumor_Volume_mm3 (float) Body_Weight_g (Float)
-
+        # For generated data:
+        # Subject_ID (str), Group (str), Time_Days (int), Tumor_Volume_mm3 (float), Body_Weight_g (Float)
+        # Or for SIR: Region (str), Time_days (int), Suspectible (int), Infected (int), Recovered (int), Population_Size (int)
     """
     A class driven method to implement different 
     techniques to visualize tumor growth activity data.
@@ -97,15 +99,91 @@ class DynamicModelling:
         plt.grid()
         plt.show()
 
+    """
+    Workshop 2: ODE-solvers
+    """
+
+    def Eulers_model(self, groupby="Region", ground="Time_Days", references=["Susceptible", "Infected", "Recovered"], plot=True, show_data=True):
+        """
+        Calculates per group an Euler-calculation based on exponential growth for
+        every reference against the ground, and makes per reference a plot with a
+        differente line for every group.
+
+        :param groupby: Column on which will be grouped
+        :param ground: Column on which Euler will work (mostly used as time)
+        :param references: Columns where the Euler equation will be used on
+        :param plot: Make the plots
+        :param show_data: Put the raw-data on the plot
+        :return: DataFrame with columns [groupby, ground, *references]
+        """
+
+        def model(data, y_name, h=1):
+            data = data.sort_values(ground)
+            t = data[ground].values
+            V = data[y_name].values
+
+            # Average growth rate:
+            if V[0] == 0:
+                V[0] = 0.01
+            r = np.log(V[-1] / V[0]) / (t[-1] - t[0])
+
+            time_euler = np.arange(t.min(), t.max() + h, h)
+            volume_euler = np.zeros(len(time_euler))
+            volume_euler[0] = V[0]
+
+            for i in range(len(time_euler) - 1):
+                volume_euler[i + 1] = volume_euler[i] + h * r * volume_euler[i]
+
+            return time_euler, volume_euler
+
+        results = []
+        for group, group_data in self.data.groupby(groupby):
+            output = {}
+            for reference in references:
+                time_euler, output[reference] = model(group_data, reference)
+            group_df = pd.DataFrame(output)
+            group_df.insert(0, ground, time_euler)
+            group_df.insert(0, groupby, group)
+            results.append(group_df)
+
+        result = pd.concat(results, ignore_index=True)
+
+        if plot:
+            for reference in references:
+                fig, ax = plt.subplots(figsize=(8, 5))
+                for group, group_df in result.groupby(groupby):
+                    line, = ax.plot(group_df[ground], group_df[reference],
+                                    label=str(group))
+                    if show_data:
+                        obs = self.data[self.data[groupby] == group]
+                        ax.scatter(obs[ground], obs[reference], s=12,
+                                   color=line.get_color(), alpha=0.6)
+                ax.set_title(f"Euler-model: {reference} per {groupby}")
+                ax.set_xlabel(ground)
+                ax.set_ylabel(reference)
+                ax.legend(title=groupby)
+                ax.grid(alpha=0.3)
+                fig.tight_layout()
+            plt.show()
+
+        return result
+
+
 def main():
-    pd_df = pd.read_csv('case1_modelleren/generated_data/sir_dummy_dataset.csv')
-    display(pd_df)
-
+    # SIR model
+    pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
+    # display(pd_df)
     dm = DynamicModelling(pd_df)
+    # dm.plot_data(groupby='Region', x='Time_Days', y='Infected')
+    # dm.plot_SIR()
+    dm.Eulers_model(groupby='Region', ground='Time_Days', references=['Susceptible', 'Infected', 'Recovered'])
 
-    dm.plot_data()
+    # All other models set-up
+    pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
+    # # display(pd_df)
+    dm = DynamicModelling(pd_df)
+    dm.Eulers_model(groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
 
-    dm.plot_SIR()
 
 if __name__ == "__main__":
     main()
