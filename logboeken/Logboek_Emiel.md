@@ -42,6 +42,11 @@ Met de labels "b-", "r-" en "g-" laat ik ook
 
  [Uitleg manipulatie code en keuzes] 
 
+Voor de analyse met echte data gebruiken we data van het NCBI.
+[A simple model of a growing tumour](https://pmc.ncbi.nlm.nih.gov/articles/PMC6546075/#_ad93_)
+
+En dan onderin bij data.
+
  Met het oog in de planning probeer ik vandaag het raamwerk volledig te krijgen 
 
 
