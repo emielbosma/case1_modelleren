@@ -25,5 +25,44 @@ tijd heen in een hypotetische populatie.
 Met de labels "b-", "r-" en "g-" laat ik ook
  de individuele datapunten zien uit de dataset.
 
+ ### Woensdag 18 november
+
+ Gisteren heb ik inhoudelijk niet echt meer iets veranderd aan de code voor workshop 1. 
+ Ik heb thuis wel wat gespeeld met verschillende waarden voor de SIR-parameters. Hieruit 
+ kwam dat bijvoorbeeld Beta (transmissiesnelheid) verhogen tot een hogere piek leidde. 
+ Door bijvoorbeeld het verlagen van de gamma (herstelsnelheid) kreeg je ook hogere pieken omdat mensen vaak gelijktijdig besmet zijn. 
+
+ In de les hebben we uitleg gekregen over de workshop 3 "Optimalisatie".
+ Aan de hand van de taakverdeling met Joris ga ik dit gedeelte uitwerken. 
+ Ik ga de workshopbeschrijving erbij pakken en kijken of ik representatieve data kan vinden 
+ voor de bewerking daarvan. 
+
+ De code uit het voorbeeld ga ik aanpassen en eigen maken. Ik denk niet dat ik alles 100% 
+ overneem uit de code en methodieken. Ik ga me focussen op verdiepingselementen zoals Monte Carlo / random search. 
+
+ [Uitleg manipulatie code en keuzes] 
+
+Voor de analyse met echte data gebruiken we data van het NCBI.
+[A simple model of a growing tumour](https://pmc.ncbi.nlm.nih.gov/articles/PMC6546075/#_ad93_).
+
+Ik heb voor nu de dataset geüploadet in "generated_data", om te voorkomen dat ik een extra directory moet maken.
+Let op: het is **geen** gegenereerde data, maar echte. 
+
+Voor het inlezen van de data heb ik een eenvoudige inleesfunctie gemaakt die Joris nu ook kan gebruiken. Hier valt 
+verder niet veel over te melden aangezien dit een eenvoudige functie is.
+
+De data betreft een onderzoek naar tumorgroei in een experimentele setting. Het experiment is uitgevoerd op 10 muizen, met 
+2 muizen in de controlegroep en 8 muizen die een behandeling ondergaan zijn. 
+
+| Groep | Behandeling | Aantal muizen |
+|---|---|---:|
+| Controle | Geen medicijn | 2 |
+| Gemcitabine | 60 mg/kg | 2 |
+| LY2835219 | 50 mg/kg | 2 |
+| LY, vervolgens Gemcitabine | Opeenvolgende behandeling | 2 |
+| LY + Gemcitabine | Combinatiebehandeling (beide tegelijk) | 2 |
+| **Totaal** | | **10** |
+
+
 
 

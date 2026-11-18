@@ -5,20 +5,40 @@ from IPython.display import display
 import numpy as np
 import math
 
-class DynamicModelling:
-    def __init__(self, data):
-        self.data = data
-        # For generated data:
-        # Subject_ID (str), Group (str), Time_Days (int), Tumor_Volume_mm3 (float), Body_Weight_g (Float)
-        # Or for SIR: Region (str), Time_days (int), Suspectible (int), Infected (int), Recovered (int), Population_Size (int)
+def load_tumordata(filepath):
     """
-    A class driven method to implement different 
-    techniques to visualize tumor growth activity data.
-    
-    Input: "generate_data/sir_dummy_dataset.csv" file containing tumor growth data.
-    Output: Visualizations of tumor growth. 
+    Reads and prepares the tumor growth dataset.
     """
 
+    df = pd.read_csv(filepath)
+
+    # Rename columns
+    df = df.rename(columns={
+        "ID": "Subject_ID",
+        "DAYS": "Time_Days",
+        "TRT": "Group",
+        "VOL": "Tumor_Volume"
+    })
+
+    # Sort data by subject and measurement time
+    df = df.sort_values(
+        ["Subject_ID", "Time_Days"]
+    ).reset_index(drop=True)
+
+    return df
+
+class DynamicModelling:
+    """
+    A class driven method to implement different
+    techniques to visualize tumor growth activity data.
+
+    Input: "generate_data/sir_dummy_dataset.csv" file containing tumor growth data.
+    Output: Visualizations of tumor growth.
+    """
+    def __init__(self, data):
+        self.data = data
+        # Subject_ID (str) Group (str) Time_Days (int) Tumor_Volume_mm3 (float) Body_Weight_g (Float)
+        # Or for SIR: Region (str), Time_days (int), Suspectible (int), Infected (int), Recovered (int), Population_Size (int)
 
     def plot_data(self, groupby = "Group", x = "Time_Days", y = "Tumor_Volume_mm3"):
         """
@@ -45,7 +65,6 @@ class DynamicModelling:
 
             plt.grid()
             plt.show()
-
     """
     Workshop 1: differentuaalvergekijkingen.
     """
@@ -197,6 +216,10 @@ class DynamicModelling:
 
 
 def main():
+    # Load tumor growth dataset
+    pd_df = load_tumordata(
+       'generated_data/peerj-07-6983-s001.csv'
+    )
     # SIR model
     # pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
     # display(pd_df)
@@ -205,13 +228,12 @@ def main():
     # dm.plot_SIR()
     # dm.ODE_models(model = 'Euler', groupby='Region', ground='Time_Days', references=['Susceptible', 'Infected', 'Recovered'])
 
-    # All other models set-up
-    pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
-    # # display(pd_df)
+    #pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
     dm = DynamicModelling(pd_df)
     dm.ODE_models(model = 'Euler', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
     dm.ODE_models(model = 'Heun', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
     dm.ODE_models(model = 'Runge-Kutta', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
+
 
 
 
