@@ -103,7 +103,7 @@ class DynamicModelling:
     Workshop 2: ODE-solvers
     """
 
-    def Eulers_model(self, groupby="Region", ground="Time_Days", references=["Susceptible", "Infected", "Recovered"], plot=True, show_data=True):
+    def ODE_models(self, model, groupby="Region", ground="Time_Days", references=["Susceptible", "Infected", "Recovered"], plot=True, show_data=True):
         """
         Calculates per group an Euler-calculation based on exponential growth for
         every reference against the ground, and makes per reference a plot with a
@@ -117,34 +117,56 @@ class DynamicModelling:
         :return: DataFrame with columns [groupby, ground, *references]
         """
 
-        def model(data, y_name, h=1):
+        def prepare(data, y_name, h):
             data = data.sort_values(ground)
-            t = data[ground].values
-            V = data[y_name].values
+            t = data[ground].values.astype(float)
+            y = data[y_name].values.astype(float)
+            if y[0] == 0: # Very bad fix for divide by zero error
+                y[0] = 0.01
+            r = np.log(y[-1] / y[0]) / (t[-1] - t[0])  # Average growth rate
+            f = lambda t_, y_: r * y_  # dy/dt = r*y
+            ts = np.arange(t.min(), t.max() + h, h)
+            ys = np.zeros(len(ts))
+            ys[0] = y[0]
+            return f, ts, ys
 
-            if V[0] == 0: # Very bad fix for divide by zero error
-                V[0] = 0.01
+        def euler_model(data, y_name, h=1):
+            f, ts, ys = prepare(data, y_name, h)
+            for i in range(len(ts) - 1):
+                ys[i + 1] = ys[i] + h * f(ts[i], ys[i])
+            return ts, ys
 
-            r = (np.log(V[-1] / V[0]) / # The average growth rate
-                 (t[-1] - t[0])) # Over the (time)span of ground
+        def heun_model(data, y_name, h=1):
+            f, ts, ys = prepare(data, y_name, h)
+            for i in range(len(ts) - 1):
+                k1 = f(ts[i], ys[i])
+                k2 = f(ts[i] + h, ys[i] + h * k1)
+                ys[i + 1] = ys[i] + h / 2 * (k1 + k2)
+            return ts, ys
 
-            time_euler = np.arange(t.min(), t.max() + h, h)
-            volume_euler = np.zeros(len(time_euler))
-            volume_euler[0] = V[0]
-
-            for i in range(len(time_euler) - 1):
-                volume_euler[i + 1] = volume_euler[i] + h * r * volume_euler[i] # Calculates the derivative on every timepoint
-
-            return time_euler, volume_euler
+        def rungekutta_model(data, y_name, h=1):
+            f, ts, ys = prepare(data, y_name, h)
+            for i in range(len(ts) - 1):
+                k1 = f(ts[i], ys[i])
+                k2 = f(ts[i] + h / 2, ys[i] + h / 2 * k1)
+                k3 = f(ts[i] + h / 2, ys[i] + h / 2 * k2)
+                k4 = f(ts[i] + h, ys[i] + h * k3)
+                ys[i + 1] = ys[i] + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+            return ts, ys
 
         results = []
-        for group, group_data in self.data.groupby(groupby): # For every reference (column specified) it will run the Euler model
+        for group, group_data in self.data.groupby(groupby): # For every reference (column specified) it will run the specified model
             output = {}
             for reference in references:
-                time_euler, output[reference] = model(group_data, reference)
+                if model == 'Euler':
+                    ts_model, output[reference] = euler_model(group_data, reference)
+                elif model == 'Heun':
+                    ts_model, output[reference] = heun_model(group_data, reference)
+                elif model == 'Runge-Kutta':
+                    ts_model, output[reference] = rungekutta_model(group_data, reference)
 
             group_df = pd.DataFrame(output)
-            group_df.insert(0, ground, time_euler)
+            group_df.insert(0, ground, ts_model)
             group_df.insert(0, groupby, group)
             results.append(group_df)
 
@@ -163,7 +185,7 @@ class DynamicModelling:
                         ax.scatter(obs[ground], obs[reference], s=12,
                                    color=line.get_color(), alpha=0.6)
 
-                ax.set_title(f"Euler-model: {reference} per {groupby}")
+                ax.set_title(f"{model}-model: {reference} per {groupby}")
                 ax.set_xlabel(ground)
                 ax.set_ylabel(reference)
                 ax.legend(title=groupby)
@@ -176,18 +198,21 @@ class DynamicModelling:
 
 def main():
     # SIR model
-    pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
+    # pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
     # display(pd_df)
-    dm = DynamicModelling(pd_df)
+    # dm = DynamicModelling(pd_df)
     # dm.plot_data(groupby='Region', x='Time_Days', y='Infected')
     # dm.plot_SIR()
-    dm.Eulers_model(groupby='Region', ground='Time_Days', references=['Susceptible', 'Infected', 'Recovered'])
+    # dm.ODE_models(model = 'Euler', groupby='Region', ground='Time_Days', references=['Susceptible', 'Infected', 'Recovered'])
 
     # All other models set-up
     pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
     # # display(pd_df)
     dm = DynamicModelling(pd_df)
-    dm.Eulers_model(groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
+    dm.ODE_models(model = 'Euler', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
+    dm.ODE_models(model = 'Heun', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
+    dm.ODE_models(model = 'Runge-Kutta', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
+
 
 
 if __name__ == "__main__":
