@@ -120,8 +120,7 @@ class DynamicModelling:
         def model(data, y_name, h=1):
             data = data.sort_values(ground)
             t = data[ground].values
-            V = data[y_name].values
-
+            V = data[y_name].values.copy()
             if V[0] == 0: # Very bad fix for divide by zero error
                 V[0] = 0.01
 
@@ -173,22 +172,47 @@ class DynamicModelling:
 
         return result
 
+    """
+    Workshop 3: Optimization 
+    """
+    # eerste sketch
+    def plot_optimization(self, groupby="TRT", ground="DAYS", references=["VOL"]):
+
+        for reference in references:
+            for group, data in self.data.groupby(groupby):
+
+                data  = data.sort_values(ground)
+                plt.scatter(data[ground], data[reference], 
+                            label="Observed data ;p")
+
+                plt.xlabel(ground)
+                plt.ylabel(reference)
+                plt.title(f"Total Optimalization: {reference} - {group}")
+
+                plt.legend()
+                plt.grid(alpha=0.5)
+                plt.show()
 
 def main():
     # SIR model
     pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
     # display(pd_df)
     dm = DynamicModelling(pd_df)
-    # dm.plot_data(groupby='Region', x='Time_Days', y='Infected')
+    dm.plot_data(groupby='Region', x='Time_Days', y='Infected')
     # dm.plot_SIR()
     dm.Eulers_model(groupby='Region', ground='Time_Days', references=['Susceptible', 'Infected', 'Recovered'])
 
-    # All other models set-up
+    # All other models set-upa
     pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
     # # display(pd_df)
     dm = DynamicModelling(pd_df)
     dm.Eulers_model(groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
 
+   # Workshop 3: PeerJ dataset
+    pd_df = pd.read_csv('generated_data/peerj-07-6983-s001.csv')
+    dm = DynamicModelling(pd_df)
+
+    dm.plot_optimization(groupby='TRT', ground='DAYS', references=['VOL'])
 
 if __name__ == "__main__":
     main()
