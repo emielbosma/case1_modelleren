@@ -11,6 +11,28 @@ Input: "generate_data/sir_dummy_dataset.csv" file containing tumor growth data.
 Output: Visualizations of tumor growth. 
 """
 
+def load_tumordata(filepath):
+    """
+    Reads and prepares the tumor growth dataset.
+    """
+
+    df = pd.read_csv(filepath)
+
+    # Rename columns
+    df = df.rename(columns={
+        "ID": "Subject_ID",
+        "DAYS": "Time_Days",
+        "TRT": "Group",
+        "VOL": "Tumor_Volume"
+    })
+
+    # Sort data by subject and measurement time
+    df = df.sort_values(
+        ["Subject_ID", "Time_Days"]
+    ).reset_index(drop=True)
+
+    return df
+
 
 class DynamicModelling:
     def __init__(self, data):
@@ -70,11 +92,21 @@ class DynamicModelling:
         plt.grid()
         plt.show()
 
+
 def main():
-    pd_df = pd.read_csv('case1_modelleren/generated_data/sir_dummy_dataset.csv')
+
+    # Load tumor growth dataset
+    pd_df = load_tumordata(
+        'case1_modelleren/generated_data/peerj-07-6983-s001.csv'
+    )
+
+    print(pd_df.head())
+    print(pd_df.info())
+
     model = DynamicModelling(pd_df)
-    model.plot_SIR()
 
 
 if __name__ == "__main__":
     main()
+
+

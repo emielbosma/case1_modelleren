@@ -43,11 +43,26 @@ Met de labels "b-", "r-" en "g-" laat ik ook
  [Uitleg manipulatie code en keuzes] 
 
 Voor de analyse met echte data gebruiken we data van het NCBI.
-[A simple model of a growing tumour](https://pmc.ncbi.nlm.nih.gov/articles/PMC6546075/#_ad93_)
+[A simple model of a growing tumour](https://pmc.ncbi.nlm.nih.gov/articles/PMC6546075/#_ad93_).
 
-En dan onderin bij data.
+Ik heb voor nu de dataset geüploadet in "generated_data", om te voorkomen dat ik een extra directory moet maken.
+Let op: het is **geen** gegenereerde data, maar echte. 
 
- Met het oog in de planning probeer ik vandaag het raamwerk volledig te krijgen 
+Voor het inlezen van de data heb ik een eenvoudige inleesfunctie gemaakt die Joris nu ook kan gebruiken. Hier valt 
+verder niet veel over te melden aangezien dit een eenvoudige functie is.
+
+De data betreft een onderzoek naar tumorgroei in een experimentele setting. Het experiment is uitgevoerd op 10 muizen, met 
+2 muizen in de controlegroep en 8 muizen die een behandeling ondergaan zijn. 
+
+| Groep | Behandeling | Aantal muizen |
+|---|---|---:|
+| Controle | Geen medicijn | 2 |
+| Gemcitabine | 60 mg/kg | 2 |
+| LY2835219 | 50 mg/kg | 2 |
+| LY, vervolgens Gemcitabine | Opeenvolgende behandeling | 2 |
+| LY + Gemcitabine | Combinatiebehandeling (beide tegelijk) | 2 |
+| **Totaal** | | **10** |
+
 
 
 
