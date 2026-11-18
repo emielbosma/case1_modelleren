@@ -122,25 +122,27 @@ class DynamicModelling:
             t = data[ground].values
             V = data[y_name].values
 
-            # Average growth rate:
-            if V[0] == 0:
+            if V[0] == 0: # Very bad fix for divide by zero error
                 V[0] = 0.01
-            r = np.log(V[-1] / V[0]) / (t[-1] - t[0])
+
+            r = (np.log(V[-1] / V[0]) / # The average growth rate
+                 (t[-1] - t[0])) # Over the (time)span of ground
 
             time_euler = np.arange(t.min(), t.max() + h, h)
             volume_euler = np.zeros(len(time_euler))
             volume_euler[0] = V[0]
 
             for i in range(len(time_euler) - 1):
-                volume_euler[i + 1] = volume_euler[i] + h * r * volume_euler[i]
+                volume_euler[i + 1] = volume_euler[i] + h * r * volume_euler[i] # Calculates the derivative on every timepoint
 
             return time_euler, volume_euler
 
         results = []
-        for group, group_data in self.data.groupby(groupby):
+        for group, group_data in self.data.groupby(groupby): # For every reference (column specified) it will run the Euler model
             output = {}
             for reference in references:
                 time_euler, output[reference] = model(group_data, reference)
+
             group_df = pd.DataFrame(output)
             group_df.insert(0, ground, time_euler)
             group_df.insert(0, groupby, group)
@@ -152,12 +154,15 @@ class DynamicModelling:
             for reference in references:
                 fig, ax = plt.subplots(figsize=(8, 5))
                 for group, group_df in result.groupby(groupby):
-                    line, = ax.plot(group_df[ground], group_df[reference],
+                    line, = ax.plot(group_df[ground],
+                                    group_df[reference],
                                     label=str(group))
-                    if show_data:
+
+                    if show_data: # To show the data points on the plot
                         obs = self.data[self.data[groupby] == group]
                         ax.scatter(obs[ground], obs[reference], s=12,
                                    color=line.get_color(), alpha=0.6)
+
                 ax.set_title(f"Euler-model: {reference} per {groupby}")
                 ax.set_xlabel(ground)
                 ax.set_ylabel(reference)

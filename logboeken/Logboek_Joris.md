@@ -47,8 +47,11 @@ Alhoewel het niet zo handig is voor sommige modellen dat er outliers zijn, gezie
 Na overleg met Emiel willen we misschien wel een tweede dataset aanmaken maar dan zonder de outliers.
 
 ### Workshop 2
-
+De tweede workshop ging over ODE's.
+Met ODE's kan je als je een twee dimensionale dataset hebt en per x stap meerdere y punten hebt het gemiddelde berekenen per x stap en dan een trendline kan maken in de grafiek.
 Na de workshop ben ik bezig gegaan met het Euler model te implementeren in de class.
+Het Euler model berekent telkens de afgeleide aan het begin van een x-stap (b.v. van x=0 naar x=1), en maakt op basis daarvan een y-stap.
+
 Voor onze tumor data set werkt dit prima. De lijn komt relatief overeen met de data.
 Ik heb het nog niet geprobeerd zonder de outliers eruit te filteren / n nieuwe dataset te genereren zonder outliers.
 
@@ -56,4 +59,6 @@ Bij de corona data-set gaf numpy divide by zero errors, en was de reference 'Rec
 Dit komt omdat de regions als startpunt allemaal 0 hebben; hierdoor wordt r oneindig.
 Deze error heb ik 'opgelost' door een if statement toe te voegen waarbij als het 0 is het wordt vervangen door 0.1.
 
-Het Euler model werkt overigens ook niet bij deze dataset. Dit komt omdat Euler linear toe of af neemt, en niet trendlines kan maken die een andere vorm dan linear hebben. Dit is vooral te zien bij Infected per Region. ![image](images/Euler_plot_sirdata_infected_per_region.png)
+Het Euler model werkt overigens ook niet bij deze dataset. Dit komt omdat Euler linear toe of af neemt, en niet trendlines kan maken die een andere vorm dan exponentieel is. Dit is vooral te zien bij Infected per Region. ![image](images/Euler_plot_sirdata_infected_per_region.png)
+
+## 18-nov-2026
