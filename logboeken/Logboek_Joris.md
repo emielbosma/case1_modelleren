@@ -69,3 +69,27 @@ Gezien ze op dezelfde principes werken als Euler heb ik een prepare functie aang
 ## 19-nov-2026
 
 Ik ging vandaag eerst bezig met opzetten van de README. Ik heb het skelet gemaakt en ben begonnen met de hoofdstukken 1, 3 en referenties.
+Daarna ging ik bezig met de wiskundige modellen te implementeren, die in brightspace staan.
+Omdat ik en Emiel graag alle 11 wiskundige modellen willen implementeren in de jupyter notebook en gezien we niet genoeg tijd hebben om ze handmatig te implementeren, hebben we besloten om de wiskundige formules te laten schrijven door AI.
+
+---
+
+### **AI disclosure statement**
+
+**Vraag aan Claude opus 5.5 (AI):**
+Ik heb gevraagd om de groeimodellen uit de TODO in `mathematical_methods` toe te voegen. De functie `prepare` in `ODE_methods` moest die modellen gaan gebruiken in plaats van de vaste exponentiële groei. Daarna heb ik gevraagd om alle comments naar het Engels te vertalen.
+
+**Wat er is gedaan:**
+- `mathematical_methods` geeft nu voor elk van de 11 modellen de differentiaalvergelijking `f(t, V)` terug. De modellen zijn lineair, exponentieel, Mendelsohn, exponentieel afvlakkend, logistisch, Montroll, Allee, lineair gelimiteerd, oppervlakte-gelimiteerd, Von Bertalanffy en Gompertz.
+- De nieuwe functie `estimate_params` schat startparameters uit de data. Vmax en Vmin volgen uit de grootste en kleinste meetwaarde. De groeisnelheid c wordt zo gekozen dat het model halverwege even snel stijgt als de data gemiddeld doet.
+- `ODE_methods` heeft twee nieuwe argumenten gekregen. Met `growth_model` kies je het model en met `params` geef je zelf parameters op. `prepare` haalt de vergelijking nu op via `mathematical_methods`.
+- Het script is getest door AI met alle modellen in combinatie met Euler, Heun en Runge-Kutta. De comments zijn daarna naar het Engels vertaald.
+
+**Waarom zo:**
+- Door de vergelijking uit `prepare` te halen, werkt elk model met elke solver. We hoeven dan niets dubbel te schrijven.
+- Het exponentiële model is de standaard en gebruikt nog dezelfde schatting als eerst. Bestaande code geeft daardoor dezelfde uitkomst.
+- De parameterschatting is bewust eenvoudig gehouden. Een goede fit hoort bij Workshop 3 (optimalisatie). De schatting is daar een startpunt voor, want de meeste modellen passen nog niet goed op de data. Emiel gaat hiet verder mee bezig.
+- De modelnamen zijn Nederlands gebleven, zodat ze overeenkomen met de namen uit de opdracht.
+
+---
+

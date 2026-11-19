@@ -36,12 +36,13 @@ class DynamicModelling:
     Input: "generate_data/sir_dummy_dataset.csv" file containing tumor growth data.
     Output: Visualizations of tumor growth.
     """
+
     def __init__(self, data):
         self.data = data
         # Subject_ID (str) Group (str) Time_Days (int) Tumor_Volume_mm3 (float) Body_Weight_g (Float)
-        # Or for SIR: Region (str), Time_days (int), Suspectible (int), Infected (int), Recovered (int), Population_Size (int)
+        # Or for SIR: Region (str), Time_days (int), Susceptible (int), Infected (int), Recovered (int), Population_Size (int)
 
-    def plot_data(self, groupby = "Group", x = "Time_Days", y = "Tumor_Volume_mm3"):
+    def plot_data(self, groupby="Group", x="Time_Days", y="Tumor_Volume_mm3"):
         """
         A function that plots the data that the class was initialized with.
 
@@ -52,7 +53,6 @@ class DynamicModelling:
         """
 
         for group, group_data in self.data.groupby(groupby):
-
             plt.figure(figsize=(8, 4))
 
             plt.scatter(
@@ -66,14 +66,16 @@ class DynamicModelling:
 
             plt.grid()
             plt.show()
+
     """
-    Workshop 1: differentuaalvergekijkingen.
+    Workshop 1: differential equations.
     """
+
     # SIR-Model
 
     def SIR_model(self, beta=0.35, gamma=0.10, N=60, delta_t=1.0):
         """
-        Parameters: 
+        Parameters:
             beta(float) : Infection rate
             gamma(float) : Recovery rate
             N(int) : total steps integration
@@ -84,7 +86,7 @@ class DynamicModelling:
             Is (list[float]) : infected population
             Rs (list[float]) : recovered population
         """
-        t = 0.0 # beginning time
+        t = 0.0  # beginning time
         ts = [t]
         S, I, R = 0.99, 0.01, 0.00
         Ss, Is, Rs = [S], [I], [R]
@@ -92,7 +94,7 @@ class DynamicModelling:
         for _ in range(N):
             infections = beta * S * I * delta_t
             recoveries = gamma * I * delta_t
-            t =  t + delta_t
+            t = t + delta_t
             S = S - infections
             I = I + infections - recoveries
             R = R + recoveries
@@ -123,17 +125,137 @@ class DynamicModelling:
     Workshop 2: ODE-solvers
     """
 
-    def ODE_models(self, model, groupby="Region", ground="Time_Days", references=["Susceptible", "Infected", "Recovered"], plot=True, show_data=True):
-        """
-        Calculates per group an Euler-calculation based on exponential growth for
-        every reference against the ground, and makes per reference a plot with a
-        differente line for every group.
+    # Default parameters per growth model. 'c' (and for Von Bertalanffy also 'd')
+    # are rate parameters; the others determine the shape of the curve.
+    MODEL_DEFAULTS = {
+        "lineair": {"c": 1.0},
+        "exponentieel": {"c": 1.0},
+        "mendelsohn": {"c": 1.0, "d": 0.5},
+        "exponentieel_afvlakkend": {"c": 1.0, "Vmax": 1.0},
+        "logistisch": {"c": 1.0, "Vmax": 1.0},
+        "montroll": {"c": 1.0, "Vmax": 1.0, "d": 0.5},
+        "allee": {"c": 1.0, "Vmin": 0.0, "Vmax": 1.0},
+        "lineair_gelimiteerd": {"c": 1.0, "d": 1.0},
+        "oppervlakte_gelimiteerd": {"c": 1.0, "d": 1.0},
+        "von_bertalanffy": {"c": 1.0, "d": 1.0},
+        "gompertz": {"c": 1.0, "Vmax": 1.0},
+    }
 
+    # Parameters that scale linearly with the growth rate (used when
+    # estimating starting values from the data)
+    RATE_PARAMS = {"von_bertalanffy": ["c", "d"]}
+
+    def mathematical_methods(self, method, **kwargs):
+        """
+        Returns the differential equation dV/dt = f(t, V) of a growth model.
+
+        Models (V = volume/size, t = time):
+            lineair                  dV/dt = c
+            exponentieel             dV/dt = c * V
+            mendelsohn               dV/dt = c * V^d
+            exponentieel_afvlakkend  dV/dt = c * (Vmax - V)
+            logistisch               dV/dt = c * V * (Vmax - V)
+            montroll                 dV/dt = c * V * (Vmax^d - V^d)
+            allee                    dV/dt = c * (V - Vmin) * (Vmax - V)
+            lineair_gelimiteerd      dV/dt = c * V / (V + d)
+            oppervlakte_gelimiteerd  dV/dt = c * V / (V + d)^(1/3)
+            von_bertalanffy          dV/dt = c * V^(2/3) - d * V
+            gompertz                 dV/dt = c * V * ln(Vmax / V)
+
+        :param method: Name of the model (see above, case-insensitive)
+        :param kwargs: Model parameters (c, d, Vmax, Vmin); missing
+                       parameters get their value from MODEL_DEFAULTS
+        :return: Function f(t, V) that returns dV/dt
+        """
+        method = method.lower().replace(" ", "_").replace("-", "_")
+        if method not in self.MODEL_DEFAULTS:
+            raise ValueError(
+                f"Unknown model '{method}'. Choose from: {list(self.MODEL_DEFAULTS)}"
+            )
+
+        p = {**self.MODEL_DEFAULTS[method], **kwargs}
+        c = p["c"]
+        d = p.get("d")
+        Vmax = p.get("Vmax")
+        Vmin = p.get("Vmin")
+        pos = lambda V: max(V, 1e-12)  # prevents negative powers / log(0)
+
+        models = {
+            "lineair": lambda t, V: c,
+            "exponentieel": lambda t, V: c * V,
+            "mendelsohn": lambda t, V: c * pos(V) ** d,
+            "exponentieel_afvlakkend": lambda t, V: c * (Vmax - V),
+            "logistisch": lambda t, V: c * V * (Vmax - V),
+            "montroll": lambda t, V: c * V * (Vmax ** d - pos(V) ** d),
+            "allee": lambda t, V: c * (V - Vmin) * (Vmax - V),
+            "lineair_gelimiteerd": lambda t, V: c * V / (V + d),
+            "oppervlakte_gelimiteerd": lambda t, V: c * V / pos(V + d) ** (1 / 3),
+            "von_bertalanffy": lambda t, V: c * pos(V) ** (2 / 3) - d * V,
+            "gompertz": lambda t, V: c * V * np.log(Vmax / pos(V)),
+        }
+        return models[method]
+
+    def estimate_params(self, method, t, y):
+        """
+        Estimates simple starting parameters for a growth model from the data.
+
+        Shape parameters (Vmax, Vmin, d) are derived from the values in the data.
+        The rate parameters are then scaled so that the slope of the model at the
+        midpoint (V_mid) equals the average slope of the data.
+        This is a rough estimate; optimization (Workshop 3) can improve it.
+
+        :param method: Name of the model
+        :param t: Array of time points
+        :param y: Array of measured values
+        :return: Dict with parameters for mathematical_methods
+        """
+        method = method.lower().replace(" ", "_").replace("-", "_")
+        params = dict(self.MODEL_DEFAULTS[method])
+        increasing = y[-1] >= y[0]
+
+        # Shape parameters from the data
+        if "Vmax" in params:
+            params["Vmax"] = 1.1 * y.max() if increasing else 0.9 * y.min()
+        if "Vmin" in params:
+            params["Vmin"] = 0.5 * y.min()
+        if method in ("lineair_gelimiteerd", "oppervlakte_gelimiteerd"):
+            params["d"] = float(np.median(y))
+        if method == "von_bertalanffy":
+            # Equilibrium Vmax = (c/d)^3, so c = d * Vmax^(1/3)
+            vmax = 1.1 * y.max() if increasing else 0.9 * y.min()
+            params["d"] = 1.0
+            params["c"] = max(vmax, 1e-12) ** (1 / 3)
+
+        # Scale rate parameters to the average slope of the data
+        slope = (y[-1] - y[0]) / (t[-1] - t[0])
+        V_mid = (y[0] + y[-1]) / 2
+        f_unit = self.mathematical_methods(method, **params)(t[0], V_mid)
+        k = slope / f_unit if np.isfinite(f_unit) and f_unit != 0 else 1.0
+        for key in self.RATE_PARAMS.get(method, ["c"]):
+            params[key] *= k
+
+        # Exponential: exact estimate r = ln(y_end / y_start) / T
+        if method == "exponentieel" and y[0] > 0 and y[-1] > 0:
+            params["c"] = np.log(y[-1] / y[0]) / (t[-1] - t[0])
+        return params
+
+    def ODE_methods(self, model, groupby="Region", ground="Time_Days",
+                    references=["Susceptible", "Infected", "Recovered"], plot=True, show_data=True,
+                    growth_model="exponentieel", params=None):
+        """
+        Calculates per group an ODE-solution (Euler, Heun or Runge-Kutta) based on
+        the chosen growth model for every reference against the ground, and makes
+        per reference a plot with a different line for every group.
+
+        :param model: ODE-solver: 'Euler', 'Heun' or 'Runge-Kutta'
         :param groupby: Column on which will be grouped
         :param ground: Column on which Euler will work (mostly used as time)
         :param references: Columns where the Euler equation will be used on
         :param plot: Make the plots
         :param show_data: Put the raw-data on the plot
+        :param growth_model: Growth model from mathematical_methods (e.g. 'logistisch')
+        :param params: Optional dict with model parameters; missing parameters
+                       are estimated from the data per group/reference
         :return: DataFrame with columns [groupby, ground, *references]
         """
 
@@ -141,10 +263,12 @@ class DynamicModelling:
             data = data.sort_values(ground)
             t = data[ground].values.astype(float)
             y = data[y_name].values.astype(float)
-            if y[0] == 0: # Very bad fix for divide by zero error
+            if y[0] == 0:  # Very bad fix for divide by zero error
                 y[0] = 0.01
-            r = np.log(y[-1] / y[0]) / (t[-1] - t[0])  # Average growth rate
-            f = lambda t_, y_: r * y_  # dy/dt = r*y
+            # Estimate parameters from the data, overwrite with user-given ones
+            model_params = self.estimate_params(growth_model, t, y)
+            model_params.update(params or {})
+            f = self.mathematical_methods(growth_model, **model_params)  # dy/dt = f(t, y)
             ts = np.arange(t.min(), t.max() + h, h)
             ys = np.zeros(len(ts))
             ys[0] = y[0]
@@ -175,7 +299,8 @@ class DynamicModelling:
             return ts, ys
 
         results = []
-        for group, group_data in self.data.groupby(groupby): # For every reference (column specified) it will run the specified model
+        for group, group_data in self.data.groupby(
+                groupby):  # For every reference (column specified) it will run the specified model
             output = {}
             for reference in references:
                 if model == 'Euler':
@@ -200,12 +325,12 @@ class DynamicModelling:
                                     group_df[reference],
                                     label=str(group))
 
-                    if show_data: # To show the data points on the plot
+                    if show_data:  # To show the data points on the plot
                         obs = self.data[self.data[groupby] == group]
                         ax.scatter(obs[ground], obs[reference], s=12,
                                    color=line.get_color(), alpha=0.6)
 
-                ax.set_title(f"{model}-model: {reference} per {groupby}")
+                ax.set_title(f"{model} ({growth_model}): {reference} per {groupby}")
                 ax.set_xlabel(ground)
                 ax.set_ylabel(reference)
                 ax.legend(title=groupby)
@@ -218,7 +343,8 @@ class DynamicModelling:
     """
     Workshop 3: Optimization 
     """
-    # eerste sketch
+
+    # first sketch
     def plot_optimization(self, groupby="TRT", ground="DAYS", references=["VOL"]):
 
         fig, ax = plt.subplots(figsize=(8, 5))
@@ -268,7 +394,7 @@ class DynamicModelling:
 def main():
     # Load tumor growth dataset
     pd_df = load_tumordata(
-        'case1_modelleren/generated_data/peerj-07-6983-s001.csv'
+        'generated_data/peerj-07-6983-s001.csv'
     )
     # SIR model
     pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
@@ -276,26 +402,26 @@ def main():
     dm = DynamicModelling(pd_df)
     dm.plot_data(groupby='Region', x='Time_Days', y='Infected')
     # dm.plot_SIR()
-    dm.ODE_models(model = 'Euler', groupby='Region', ground='Time_Days', references=['Susceptible', 'Infected', 'Recovered'])
+    dm.ODE_methods(model='Euler', groupby='Region', ground='Time_Days',
+                   references=['Susceptible', 'Infected', 'Recovered'])
 
-    # All other models set-upa
+    # All other models set-up
     pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
     # # display(pd_df)
     dm = DynamicModelling(pd_df)
-    dm.ODE_models(model = 'Euler', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
+    dm.ODE_methods(model='Euler', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
 
-    # All other models set-upa
-    pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
-    # # display(pd_df)
-    dm = DynamicModelling(pd_df)
-    dm.ODE_models(model = 'Euler', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
+    # Different growth model with Runge-Kutta, optionally with custom parameters
+    dm.ODE_methods(model='Runge-Kutta', groupby='Group', references=['Tumor_Volume_mm3'],
+                   growth_model='gompertz')
+    # dm.ODE_methods(model='Heun', groupby='Group', references=['Tumor_Volume_mm3'],
+    #                growth_model='logistisch', params={'Vmax': 2000})
 
-   # Workshop 3: PeerJ dataset
+    # Workshop 3: PeerJ dataset
     pd_df = pd.read_csv('generated_data/peerj-07-6983-s001.csv')
     dm = DynamicModelling(pd_df)
     dm.plot_optimization(groupby='TRT', ground='DAYS', references=['VOL'])
 
+
 if __name__ == "__main__":
     main()
-
-
