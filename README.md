@@ -8,10 +8,15 @@ _Hanze University of Applied Sciences Groningen_
 
 ## Table of contents
 
-1. Goal of this repository;
-2. Content of this repository;
-3. Background information;
-4. References.
+1. [Goal of this repository](#1-goal-of-this-repository);
+2. [Content of this repository](#2-content-of-this-repository);
+3. [Background information](#3-background-information);
+4. [Installation & Requirements](#4-installation--requirements);
+5. [Models](#5-models);
+6. [Methods](#6-methods);
+7. [Optimization](#7-optimization);
+8. [Model-Comparing](#8-model-comparing);
+9. [References](#9-references).
 
 ## 1. Goal of this repository
 
