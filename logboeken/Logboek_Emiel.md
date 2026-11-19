@@ -63,6 +63,32 @@ De data betreft een onderzoek naar tumorgroei in een experimentele setting. Het 
 | LY + Gemcitabine | Combinatiebehandeling (beide tegelijk) | 2 |
 | **Totaal** | | **10** |
 
+### Donderdag 19 november
 
+Ik heb gisteravond een functie toegevoegd aan de main. Deze functie 
+plot de tumorgroei per reference (dus op Controle en behandeling). 
 
+De grafiekjes worden nu nog afzonderlijk geplot. Dit is het begin om te kijken 
+of de data juist wordt ingelezen en geplot. Mijn doel vandaag/morgen
+ is om de code zo in te stellen dat alle 5 condities geplot worden 
+ in één figuur. 
 
+Wat ik voor de rest vandaag wil doen is het doorspitten van de 
+rubrics voor dit vak. Op die manier wil ik bekijken wat er precies allemaal 
+nodig is voor een gedegen product. 
+
+Ik heb even gekeken naar de rubric en dit zijn de belangrijkste punten die 
+ik eruit heb gehaald:
+
+1) Notebook is: reproduceerbaar, navolgbaar.
+2) De code: werkt, is efficiënt en maakt gebruik van externe modules en/of implementaties. 
+3) Reproduceerbaarheid via Git. 
+4) Toelichtingen in het notebook/ logboek.
+5) Biologische betekenis m.b.t. modelleren van kanker. 
+6) Code verdedigen in mondeling. 
+7) Analysestappen worden verdedigd in het logboek. 
+
+Zie voor de precieze beoordeling het rubric bestand.
+
+Dit typ ik voor de les, dus eventuele nieuwe inzichten zullen hieronder verder 
+worden uitgewerkt. 
