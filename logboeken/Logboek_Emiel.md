@@ -25,6 +25,15 @@ tijd heen in een hypotetische populatie.
 Met de labels "b-", "r-" en "g-" laat ik ook
  de individuele datapunten zien uit de dataset.
 
+[AI Prompt voor de dummy data SIR-model]
+"Genereer een dummy dataset op basis van de parameters bij 
+het SIR-model met outliers. Maak de dataset niet te groot, 
+het is voor modelleren."
+
+[AI Prompt voor de dummy data Tumorgroei]
+"Genereer een dummy dataset op basis van een realistische 
+tumorgroei met outliers. De dataset is voor modelleren."
+
  ### Woensdag 18 november
 
  Gisteren heb ik inhoudelijk niet echt meer iets veranderd aan de code voor workshop 1. 
@@ -39,8 +48,7 @@ Met de labels "b-", "r-" en "g-" laat ik ook
 
  De code uit het voorbeeld ga ik aanpassen en eigen maken. Ik denk niet dat ik alles 100% 
  overneem uit de code en methodieken. Ik ga me focussen op verdiepingselementen zoals Monte Carlo / random search. 
-
- [Uitleg manipulatie code en keuzes] 
+ 
 
 Voor de analyse met echte data gebruiken we data van het NCBI.
 [A simple model of a growing tumour](https://pmc.ncbi.nlm.nih.gov/articles/PMC6546075/#_ad93_).
@@ -63,6 +71,69 @@ De data betreft een onderzoek naar tumorgroei in een experimentele setting. Het 
 | LY + Gemcitabine | Combinatiebehandeling (beide tegelijk) | 2 |
 | **Totaal** | | **10** |
 
+### Donderdag 19 november
+
+Ik heb gisteravond een functie toegevoegd aan de main. Deze functie 
+plot de tumorgroei per reference (dus op Controle en behandeling). 
+
+De grafiekjes worden nu nog afzonderlijk geplot. Dit is het begin om te kijken 
+of de data juist wordt ingelezen en geplot. Mijn doel vandaag/morgen
+ is om de code zo in te stellen dat alle 5 condities geplot worden 
+ in één figuur. 
+
+Wat ik voor de rest vandaag wil doen is het doorspitten van de 
+rubrics voor dit vak. Op die manier wil ik bekijken wat er precies allemaal 
+nodig is voor een gedegen product. 
+
+Ik heb even gekeken naar de rubric en dit zijn de belangrijkste punten die 
+ik eruit heb gehaald:
+
+1) Notebook is: reproduceerbaar, navolgbaar.
+2) De code: werkt, is efficiënt en maakt gebruik van externe modules en/of implementaties. 
+3) Reproduceerbaarheid via Git. 
+4) Toelichtingen in het notebook/ logboek.
+5) Biologische betekenis m.b.t. modelleren van kanker. 
+6) Code verdedigen in mondeling. 
+7) Analysestappen worden verdedigd in het logboek. 
+
+Zie voor de precieze beoordeling het rubric bestand.
+
+Dit typ ik voor de les, dus eventuele nieuwe inzichten zullen hieronder verder 
+worden uitgewerkt. 
+
+Ik heb tijdens de les verder gewerkt aan de optimalisatie workshop. 
+Het script `def plot_optimalization()` berekent nu aan de hand van de in 
+de workshop geleverde HTML random search een lineaire optimalisatielijn. 
+
+Het script is nu nog een beetje rommelig. Dit komt met name om het feit 
+dat we in de meeste scripts dezelfde optimalisatie-stappen nemen. Ik zal me 
+na vandaag focussen op het integreren van een meer reproduceerbare manier hiervoor. 
+
+Joris stelde voor om bijvoorbeeld een standaardfunctie hiervoor te maken, waarna 
+je in de main alleen nog maar de juiste parameter-waarden mee hoeft te geven. 
+
+Daarnaast heb ik op dit moment alleen nog een lineaire toepassing gemaakt voor de Workshop 3. 
+Dit wil ik dit weekend uitbreiden/aanpassen naar een exponentieel model. Dit past ook veel 
+beter bij tumorgroei. Tumorgroei is namelijk niet een lineair proces, het neigt juist 
+vaker naar een exponentieel verband. 
+
+Hieronder is de foto te zien van de plot die 
+nu gegenereerd wordt aan de hand van het lineaire model. 
+
+![Picture Optimalization Linear](images/optimalization_linear.jpg)
+
+De grafiek toont de gemeten tumorwaarden (scatterpoints) en de 
+bijbehorende lineaire trendlijnen. Met behulp van random search zijn per behandelconditie 
+de parameters bepaald die de MSE (mean squared error) minimaliseren. 
+Op deze manier zijn de 5 condities gezamenlijk te vergelijken. 
+
+De controlegroep verootn in deze dataset de sterkste lineaire groei, terwijl de 
+behandeling LY+ Gemcitabine de laagste groei. We kunnen dus voorzichtig zeggen dat 
+de muizen met die gecombineerde behandeling het minste tumorgroei laten zien. 
+
+Zoals eerder benoemd is dit het lineaire model. Na het implementeren van de exponentiele variant ga ik weer een analyse doen.
+
+De formule voor het exponentiele groei model is: V(t) = V(0)e^at 
 
 
-
+ 
