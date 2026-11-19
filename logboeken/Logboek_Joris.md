@@ -59,6 +59,13 @@ Bij de corona data-set gaf numpy divide by zero errors, en was de reference 'Rec
 Dit komt omdat de regions als startpunt allemaal 0 hebben; hierdoor wordt r oneindig.
 Deze error heb ik 'opgelost' door een if statement toe te voegen waarbij als het 0 is het wordt vervangen door 0.1.
 
-Het Euler model werkt overigens ook niet bij deze dataset. Dit komt omdat Euler linear toe of af neemt, en niet trendlines kan maken die een andere vorm dan exponentieel is. Dit is vooral te zien bij Infected per Region. ![image](images/Euler_plot_sirdata_infected_per_region.png)
+Het Euler model-method werkt overigens ook niet bij deze dataset. Dit komt omdat de statistische model linear toe of af neemt, en niet trendlines kan maken die een andere vorm dan exponentieel is. Dit is vooral te zien bij Infected per Region. ![image](images/Euler_plot_sirdata_infected_per_region.png)
 
 ## 18-nov-2026
+
+Vandaag ben ik bezig geweest met de andere ODE methodes toe te voegen.
+Gezien ze op dezelfde principes werken als Euler heb ik een prepare functie aangemaakt, en dan per methode een aparte functie heb gemaakt die afhankelijk is van de prepare functie.
+
+## 19-nov-2026
+
+Ik ging vandaag eerst bezig met opzetten van de README. Ik heb het skelet gemaakt en ben begonnen met de hoofdstukken 1, 3 en referenties.
