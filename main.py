@@ -214,6 +214,26 @@ class DynamicModelling:
 
         return result
 
+    """
+    Workshop 3: Optimization 
+    """
+    # eerste sketch
+    def plot_optimization(self, groupby="TRT", ground="DAYS", references=["VOL"]):
+
+        for reference in references:
+            for group, data in self.data.groupby(groupby):
+
+                data  = data.sort_values(ground)
+                plt.scatter(data[ground], data[reference],
+                            label="Observed data ;p")
+
+                plt.xlabel(ground)
+                plt.ylabel(reference)
+                plt.title(f"Total Optimalization: {reference} - {group}")
+
+                plt.legend()
+                plt.grid(alpha=0.5)
+                plt.show()
 
 def main():
     # Load tumor growth dataset
@@ -221,21 +241,24 @@ def main():
        'generated_data/peerj-07-6983-s001.csv'
     )
     # SIR model
-    # pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
+    pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
     # display(pd_df)
-    # dm = DynamicModelling(pd_df)
-    # dm.plot_data(groupby='Region', x='Time_Days', y='Infected')
+    dm = DynamicModelling(pd_df)
+    dm.plot_data(groupby='Region', x='Time_Days', y='Infected')
     # dm.plot_SIR()
-    # dm.ODE_models(model = 'Euler', groupby='Region', ground='Time_Days', references=['Susceptible', 'Infected', 'Recovered'])
+    dm.ODE_models(model = 'Euler', groupby='Region', ground='Time_Days', references=['Susceptible', 'Infected', 'Recovered'])
 
-    #pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
+    # All other models set-upa
+    pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
+    # # display(pd_df)
     dm = DynamicModelling(pd_df)
     dm.ODE_models(model = 'Euler', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
-    dm.ODE_models(model = 'Heun', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
-    dm.ODE_models(model = 'Runge-Kutta', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
 
+   # Workshop 3: PeerJ dataset
+    pd_df = pd.read_csv('generated_data/peerj-07-6983-s001.csv')
+    dm = DynamicModelling(pd_df)
 
-
+    dm.plot_optimization(groupby='TRT', ground='DAYS', references=['VOL'])
 
 if __name__ == "__main__":
     main()
