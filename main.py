@@ -4,6 +4,7 @@ import pandas as pd
 from IPython.display import display
 import numpy as np
 import math
+from random import gauss
 
 def load_tumordata(filepath):
     """
@@ -217,23 +218,53 @@ class DynamicModelling:
     """
     Workshop 3: Optimization 
     """
-    # eerste sketch
     def plot_optimization(self, groupby="TRT", ground="DAYS", references=["VOL"]):
 
-        for reference in references:
+            fig, ax = plt.subplots(figsize=(8, 5))
+
             for group, data in self.data.groupby(groupby):
-
+                
                 data  = data.sort_values(ground)
-                plt.scatter(data[ground], data[reference],
-                            label="Observed data ;p")
 
-                plt.xlabel(ground)
-                plt.ylabel(reference)
-                plt.title(f"Total Optimalization: {reference} - {group}")
+                x = data[ground].values
+                y = data[references[0]].values
 
-                plt.legend()
-                plt.grid(alpha=0.5)
-                plt.show()
+                # Beginning values
+                params = {'a': 0.1, 'b': 0.0}
+                mse = np.mean((y - (params['a'] * x + params['b'])) ** 2)
+
+                # Simple Random Search adapted from Workshop 3-HTML
+                tries = 0
+                while tries < 1000:
+                    tries += 1
+
+                    new_params = {
+                        key: val + gauss(sigma=0.01)
+                        for key, val in params.items()
+                    }
+
+                    new_mse = np.mean(
+                        (y - new_params['a'] * x - new_params['b'])**2
+                    )
+
+                    if new_mse < mse:
+                        params = new_params
+                        mse = new_mse
+                        tries = 0
+                
+
+                ax.scatter(x,y, alpha=0.5)
+                ax.plot(x, params['a'] * x + params['b'], label=str(group))
+
+            ax.set_xlabel(ground)
+            ax.set_ylabel(references[0])
+            ax.set_title("Optimized tumor growth per treatment")
+            ax.legend(title="Treatment")
+            ax.grid(alpha=0.5)
+
+            
+            fig.tight_layout()
+            plt.show()
 
 def main():
     # Load tumor growth dataset
@@ -256,6 +287,8 @@ def main():
 
    # Workshop 3: PeerJ dataset
     pd_df = pd.read_csv('generated_data/peerj-07-6983-s001.csv')
+
+
     dm = DynamicModelling(pd_df)
 
     dm.plot_optimization(groupby='TRT', ground='DAYS', references=['VOL'])

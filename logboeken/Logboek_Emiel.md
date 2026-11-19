@@ -25,6 +25,15 @@ tijd heen in een hypotetische populatie.
 Met de labels "b-", "r-" en "g-" laat ik ook
  de individuele datapunten zien uit de dataset.
 
+[AI Prompt voor de dummy data SIR-model]
+"Genereer een dummy dataset op basis van de parameters bij 
+het SIR-model met outliers. Maak de dataset niet te groot, 
+het is voor modelleren."
+
+[AI Prompt voor de dummy data Tumorgroei]
+"Genereer een dummy dataset op basis van een realistische 
+tumorgroei met outliers. De dataset is voor modelleren."
+
  ### Woensdag 18 november
 
  Gisteren heb ik inhoudelijk niet echt meer iets veranderd aan de code voor workshop 1. 
@@ -39,8 +48,7 @@ Met de labels "b-", "r-" en "g-" laat ik ook
 
  De code uit het voorbeeld ga ik aanpassen en eigen maken. Ik denk niet dat ik alles 100% 
  overneem uit de code en methodieken. Ik ga me focussen op verdiepingselementen zoals Monte Carlo / random search. 
-
- [Uitleg manipulatie code en keuzes] 
+ 
 
 Voor de analyse met echte data gebruiken we data van het NCBI.
 [A simple model of a growing tumour](https://pmc.ncbi.nlm.nih.gov/articles/PMC6546075/#_ad93_).

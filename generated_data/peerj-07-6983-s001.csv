@@ -1,0 +1,111 @@
+ID,DAYS,TRT,VOL
+1,0,Control,147.495
+1,4,Control,218.036
+1,7,Control,256.513
+1,10,Control,339.879
+1,14,Control,461.723
+1,17,Control,622.044
+1,21,Control,878.556
+1,24,Control,1045.29
+1,28,Control,1340.279
+1,31,Control,1507.013
+1,35,Control,1769.938
+2,0,Control,147.495
+2,4,Control,218.036
+2,7,Control,256.513
+2,10,Control,339.879
+2,14,Control,461.723
+2,17,Control,622.044
+2,21,Control,878.556
+2,24,Control,1045.29
+2,28,Control,1340.279
+2,31,Control,1507.013
+2,35,Control,1769.938
+3,0,LY283519 50mg/kg qdx21,147.495
+3,4,LY283519 50mg/kg qdx21,173.146
+3,7,LY283519 50mg/kg qdx21,198.797
+3,10,LY283519 50mg/kg qdx21,224.449
+3,14,LY283519 50mg/kg qdx21,346.292
+3,17,LY283519 50mg/kg qdx21,442.485
+3,21,LY283519 50mg/kg qdx21,570.741
+3,24,LY283519 50mg/kg qdx21,679.759
+3,28,LY283519 50mg/kg qdx21,923.446
+3,31,LY283519 50mg/kg qdx21,1186.372
+3,35,LY283519 50mg/kg qdx21,1692.985
+4,0,LY283519 50mg/kg qdx21,147.495
+4,4,LY283519 50mg/kg qdx21,173.146
+4,7,LY283519 50mg/kg qdx21,198.797
+4,10,LY283519 50mg/kg qdx21,224.449
+4,14,LY283519 50mg/kg qdx21,346.292
+4,17,LY283519 50mg/kg qdx21,442.485
+4,21,LY283519 50mg/kg qdx21,570.741
+4,24,LY283519 50mg/kg qdx21,679.759
+4,28,LY283519 50mg/kg qdx21,923.446
+4,31,LY283519 50mg/kg qdx21,1186.372
+4,35,LY283519 50mg/kg qdx21,1692.985
+5,0,Gem 60 mg/kg q3dx7,147.495
+5,4,Gem 60 mg/kg q3dx7,173.146
+5,7,Gem 60 mg/kg q3dx7,198.797
+5,10,Gem 60 mg/kg q3dx7,224.449
+5,14,Gem 60 mg/kg q3dx7,256.513
+5,17,Gem 60 mg/kg q3dx7,307.815
+5,21,Gem 60 mg/kg q3dx7,448.897
+5,24,Gem 60 mg/kg q3dx7,506.613
+5,28,Gem 60 mg/kg q3dx7,692.585
+5,31,Gem 60 mg/kg q3dx7,897.795
+5,35,Gem 60 mg/kg q3dx7,1353.105
+6,0,Gem 60 mg/kg q3dx7,147.495
+6,4,Gem 60 mg/kg q3dx7,173.146
+6,7,Gem 60 mg/kg q3dx7,198.797
+6,10,Gem 60 mg/kg q3dx7,224.449
+6,14,Gem 60 mg/kg q3dx7,256.513
+6,17,Gem 60 mg/kg q3dx7,307.815
+6,21,Gem 60 mg/kg q3dx7,448.897
+6,24,Gem 60 mg/kg q3dx7,506.613
+6,28,Gem 60 mg/kg q3dx7,692.585
+6,31,Gem 60 mg/kg q3dx7,897.795
+6,35,Gem 60 mg/kg q3dx7,1353.105
+7,0,LY qdx12 -> Gem q3dx4,147.495
+7,4,LY qdx12 -> Gem q3dx4,173.146
+7,7,LY qdx12 -> Gem q3dx4,198.797
+7,10,LY qdx12 -> Gem q3dx4,224.449
+7,14,LY qdx12 -> Gem q3dx4,288.577
+7,17,LY qdx12 -> Gem q3dx4,397.595
+7,21,LY qdx12 -> Gem q3dx4,461.723
+7,24,LY qdx12 -> Gem q3dx4,461.723
+7,28,LY qdx12 -> Gem q3dx4,506.613
+7,31,LY qdx12 -> Gem q3dx4,692.585
+7,35,LY qdx12 -> Gem q3dx4,1064.528
+8,0,LY qdx12 -> Gem q3dx4,147.495
+8,4,LY qdx12 -> Gem q3dx4,173.146
+8,7,LY qdx12 -> Gem q3dx4,198.797
+8,10,LY qdx12 -> Gem q3dx4,224.449
+8,14,LY qdx12 -> Gem q3dx4,288.577
+8,17,LY qdx12 -> Gem q3dx4,397.595
+8,21,LY qdx12 -> Gem q3dx4,461.723
+8,24,LY qdx12 -> Gem q3dx4,461.723
+8,28,LY qdx12 -> Gem q3dx4,506.613
+8,31,LY qdx12 -> Gem q3dx4,692.585
+8,35,LY qdx12 -> Gem q3dx4,1064.528
+9,0,LY qdx21 + Gem q3dx7,147.495
+9,4,LY qdx21 + Gem q3dx7,173.146
+9,7,LY qdx21 + Gem q3dx7,198.797
+9,10,LY qdx21 + Gem q3dx7,224.449
+9,14,LY qdx21 + Gem q3dx7,211.623
+9,17,LY qdx21 + Gem q3dx7,198.797
+9,21,LY qdx21 + Gem q3dx7,205.21
+9,24,LY qdx21 + Gem q3dx7,237.274
+9,28,LY qdx21 + Gem q3dx7,333.467
+9,31,LY qdx21 + Gem q3dx7,429.659
+9,35,LY qdx21 + Gem q3dx7,756.713
+10,0,LY qdx21 + Gem q3dx7,147.495
+10,4,LY qdx21 + Gem q3dx7,173.146
+10,7,LY qdx21 + Gem q3dx7,198.797
+10,10,LY qdx21 + Gem q3dx7,224.449
+10,14,LY qdx21 + Gem q3dx7,211.623
+10,17,LY qdx21 + Gem q3dx7,198.797
+10,21,LY qdx21 + Gem q3dx7,205.21
+10,24,LY qdx21 + Gem q3dx7,237.274
+10,28,LY qdx21 + Gem q3dx7,333.467
+10,31,LY qdx21 + Gem q3dx7,429.659
+10,35,LY qdx21 + Gem q3dx7,756.713
