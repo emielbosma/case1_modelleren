@@ -100,3 +100,40 @@ Zie voor de precieze beoordeling het rubric bestand.
 
 Dit typ ik voor de les, dus eventuele nieuwe inzichten zullen hieronder verder 
 worden uitgewerkt. 
+
+Ik heb tijdens de les verder gewerkt aan de optimalisatie workshop. 
+Het script `def plot_optimalization()` berekent nu aan de hand van de in 
+de workshop geleverde HTML random search een lineaire optimalisatielijn. 
+
+Het script is nu nog een beetje rommelig. Dit komt met name om het feit 
+dat we in de meeste scripts dezelfde optimalisatie-stappen nemen. Ik zal me 
+na vandaag focussen op het integreren van een meer reproduceerbare manier hiervoor. 
+
+Joris stelde voor om bijvoorbeeld een standaardfunctie hiervoor te maken, waarna 
+je in de main alleen nog maar de juiste parameter-waarden mee hoeft te geven. 
+
+Daarnaast heb ik op dit moment alleen nog een lineaire toepassing gemaakt voor de Workshop 3. 
+Dit wil ik dit weekend uitbreiden/aanpassen naar een exponentieel model. Dit past ook veel 
+beter bij tumorgroei. Tumorgroei is namelijk niet een lineair proces, het neigt juist 
+vaker naar een exponentieel verband. 
+
+Hieronder is de foto te zien van de plot die 
+nu gegenereerd wordt aan de hand van het lineaire model. 
+
+![Picture Optimalization Linear](images/optimalization_linear.jpg)
+
+De grafiek toont de gemeten tumorwaarden (scatterpoints) en de 
+bijbehorende lineaire trendlijnen. Met behulp van random search zijn per behandelconditie 
+de parameters bepaald die de MSE (mean squared error) minimaliseren. 
+Op deze manier zijn de 5 condities gezamenlijk te vergelijken. 
+
+De controlegroep verootn in deze dataset de sterkste lineaire groei, terwijl de 
+behandeling LY+ Gemcitabine de laagste groei. We kunnen dus voorzichtig zeggen dat 
+de muizen met die gecombineerde behandeling het minste tumorgroei laten zien. 
+
+Zoals eerder benoemd is dit het lineaire model. Na het implementeren van de exponentiele variant ga ik weer een analyse doen.
+
+De formule voor het exponentiele groei model is: V(t) = V(0)e^at 
+
+
+ 
