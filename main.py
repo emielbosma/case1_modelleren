@@ -266,6 +266,55 @@ class DynamicModelling:
             fig.tight_layout()
             plt.show()
 
+    def plot_optimization_exp(self, groupby="TRT", ground="DAYS", references=["VOL"]):
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+
+        for group, data in self.data.groupby(groupby):
+
+            data = data.sort_values(ground)
+
+            x = data[ground].values
+            y = data[references[0]].values
+
+            # Exponential model 
+            y0 = y[x == x.min()].mean()
+
+            params = {'b': 0.01}
+            mse = np.mean((y - y0 * np.exp(params['b'] * (x - x.min()))) ** 2)
+
+            # Random Search from Workshop 3-HTML
+            tries = 0
+            while tries < 1000:
+                tries += 1
+
+                new_params = {
+                    key: val + gauss(sigma=0.01)
+                    for key, val in params.items()
+                }
+
+                # Exponential MSE calculation
+                new_mse = np.mean(
+                    (y - y0 * np.exp(new_params['b'] * (x - x.min()))) ** 2
+                )
+
+                if new_mse < mse:
+                    params = new_params
+                    mse = new_mse
+                    tries = 0
+
+            # For Plotting
+            ax.scatter(x, y, alpha=0.5)
+            ax.plot(x, y0 * np.exp(params['b'] * (x - x.min())), label=str(group))
+        ax.set_xlabel(ground)
+        ax.set_ylabel(references[0])
+        ax.set_title("Optimized tumor growth (exponential) per treatment")
+        ax.legend(title="Treatment")
+        ax.grid(alpha=0.5)
+
+        fig.tight_layout()
+        plt.show()
+
 def main():
     # Load tumor growth dataset
     pd_df = load_tumordata(
@@ -291,7 +340,7 @@ def main():
 
     dm = DynamicModelling(pd_df)
 
-    dm.plot_optimization(groupby='TRT', ground='DAYS', references=['VOL'])
-
+    dm.plot_optimization(groupby='TRT', ground='DAYS', references=['VOL']) # Linear model
+    dm.plot_optimization_exp(groupby='TRT', ground='DAYS', references=['VOL'])  # Exponential model
 if __name__ == "__main__":
     main()

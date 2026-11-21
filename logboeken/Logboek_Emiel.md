@@ -135,5 +135,41 @@ Zoals eerder benoemd is dit het lineaire model. Na het implementeren van de expo
 
 De formule voor het exponentiele groei model is: V(t) = V(0)e^at 
 
+### Zaterdag 21 november
 
+Ik ben vandaag bezig geweest met het veranderen van het lineaire 
+optimalisatie model naar een exponentiële. Ik heb hier voor grotendeels
+de code van het lineaire model overgenomen en aangepast naar de 
+exponentiële variant. 
+
+Transparantie AI-gebruik: ik heb voor het implementeren van de 
+exponentiële groeimodel aan Copilot gevraagd hoe de syntax werkt voor 
+een exponentiëel model in python. Aan de hand van voorbeeld stukjes code en 
+terugkoppeling naar mijn eerder gemaakte werk wist ik op die manier 
+de andere plotmethode te implementeren. VSCode beschikt ook over 
+voorspellende code-model. Waardoor er soms suggesties verschijnen in het 
+scherm tijdens het coderen. Deze heb ik niet altijd aangenomen, maar heeft 
+me in sommige situaties wel op de juiste weg geholpen. 
+
+**Wat hebben we precies veranderd?**
+
+1) Het model veranderd van `a*x + b` naar `y0*np.exp(b*x)`. 
+2) MSE omgezet naar een exponentiële voorspelling.
+3) Een exponentiële trendlijn. 
  
+We gaan nu het script het runnen en de output vergelijken met de plot 
+van het lineaire model. 
+
+![Picture of Optimization Exponential](images/optimization_exp_1.png)
+
+Zoals te zien is in bovenstaande afbeeldingen komt deze trendlijn 
+al veel beter in de buurt van de werkelijkheid dan de lineaire plot.
+
+Hoe verder de plot doorgaat hoe meer de onzekerheid toeneemt. 
+Ik ga kijken of ik later dit weekend nog een complexer 
+model kan implementeren om de data nog beter te krijgen. 
+
+We gebruiken nu `V(t) = V(0)e^bt`. In het model dat we gebruiken 
+wordt alleen de b-parameter geoptimaliseerd. Het is lastig om 
+tijd de optimaliseren, dus we zouden eventueel morgen nog V(0) kunnen 
+proberen te optimaliseren. Voor nu ben ik eerst blij met dit eindresultaat.
