@@ -161,3 +161,6 @@ Gezien ik online niet een uitgewerkte handleiding kon vinden voor markdown wisku
 
 ### Jupyter notebook bijwerken:
 
+Emiel heeft het jupyter notebook al best wel uitgebreid gemaakt. \
+Ik heb zelf paar aanpassingen gemaakt aan de functies  `model_comparison` en `optimization`, zodat ze de params teruggeven en een plot kunnen maken.
+Dit heb ik ook toegepast in de jupyter notebook, zodat de beste gefitte model kan worden laten gezien.

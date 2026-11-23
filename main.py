@@ -401,7 +401,9 @@ class DynamicModelling:
         :param sigma: Relative step size of the random search
         :param patience: Stop after this many attempts without improvement
         :param max_iter: Maximum total number of attempts per group
-        :param params: Optional dict with fixed starting values (overwrites the estimate)
+        :param params: Optional dict with fixed starting values (overwrites the estimate),
+                       either one dict for all groups or {group: {...}}.
+                       Use max_iter=0 to only plot these params without optimizing.
         :return: dict with
                  'params' -> {group: optimized parameters}
                  'mse'    -> {group: MSE of that group}
@@ -437,7 +439,8 @@ class DynamicModelling:
             y_mean[0] = y0
 
             best = self.estimate_params(model, t_mean, y_mean)
-            best.update(params or {})
+            # params can be one dict for all groups, or {group: {...}} (e.g. from model_comparison)
+            best.update(params.get(group, params) if params else {})
             best = {key: float(val) for key, val in best.items()}
             mse = calc_mse(best)
 
@@ -508,6 +511,7 @@ class DynamicModelling:
         """
         models = models or list(self.MODEL_DEFAULTS.keys())
         rows = {}
+        params = {}
 
         for model in models:
             fit = self.optimization(model=model, method=method, groupby=groupby,
@@ -520,49 +524,7 @@ class DynamicModelling:
             AICc = AIC + (2 * k * (k + 1)) / (n - k - 1) if n - k - 1 > 0 else np.inf
             BIC = n * math.log(mse) + k * math.log(n)
             rows[model] = {"n": n, "k": k, "MSE": mse, "AIC": AIC, "AICc": AICc, "BIC": BIC}
+            params[model] = fit["params"]
 
         results = pd.DataFrame.from_dict(rows, orient="index").sort_values("AICc")
-        return results
-
-
-def main():
-    # # Load tumor growth dataset
-    # pd_df = load_tumordata(
-    #     'generated_data/peerj-07-6983-s001.csv'
-    # )
-    # # SIR model
-    # pd_df = pd.read_csv('generated_data/sir_dummy_dataset.csv')
-    # # display(pd_df)
-    # dm = DynamicModelling(pd_df)
-    # dm.plot_data(groupby='Region', x='Time_Days', y='Infected')
-    # # dm.plot_SIR()
-    # dm.ODE_methods(model='Euler', groupby='Region', ground='Time_Days',
-    #                references=['Susceptible', 'Infected', 'Recovered'])
-    #
-    # # All other models set-up
-    # pd_df = pd.read_csv('generated_data/tumorgroei_dummy_dataset.csv')
-    # # # display(pd_df)
-    # dm = DynamicModelling(pd_df)
-    # dm.ODE_methods(model='Euler', groupby='Group', references=['Tumor_Volume_mm3', 'Body_Weight_g'])
-    #
-    # # Different growth model with Runge-Kutta, optionally with custom parameters
-    # dm.ODE_methods(model='Runge-Kutta', groupby='Group', references=['Tumor_Volume_mm3'],
-    #                growth_model='gompertz')
-    # # dm.ODE_methods(model='Heun', groupby='Group', references=['Tumor_Volume_mm3'],
-    # #                growth_model='logistisch', params={'Vmax': 2000})
-
-    # Workshop 3: PeerJ dataset
-    pd_df = pd.read_csv('generated_data/peerj-07-6983-s001.csv')
-    dm = DynamicModelling(pd_df)
-
-    # dm.plot_optimization(model='gompertz', method='Runge-Kutta',
-    #                      groupby='TRT', ground='DAYS', references=['VOL'], plot=True)
-    # dm.plot_optimization_exp(groupby='TRT', ground='DAYS', references=['VOL'])  # Exponential model
-
-    # Workshop 4: model comparison
-    comparison = dm.model_comparison(groupby='TRT', ground='DAYS', references=['VOL'],
-                                     method='Runge-Kutta')
-    print(comparison.to_string())
-
-if __name__ == "__main__":
-    main()
+        return results, params
