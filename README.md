@@ -50,11 +50,68 @@ This makes it essential for bioinformatics to understand and be able to apply su
 
 ## 5. Models
 
+The repository implements several mathematical models to 
+describe tumor growth and infectious disease spread:
+
+Parameters:
+
+(V): Tumor volume
+
+(t): Time
+
+(c): Growth-rate constant
+
+(d): Growth exponent
+
+(Vmax): Maximum tumor volume
+
 ### a. SIR-model
+
+The SIR-model describes the spread of infectious diseases by 
+dividing a population into three groups: susceptible (S), infected (I) and 
+recovered (R).
 
 ### b. Linear growth
 
-### ...etc
+Constant growth rate, independant of the current tumor volume.
+
+$$
+\frac{dV}{dt}=c
+$$
+
+### c. Exponential growth
+
+Assumes that growth rate is proportional to the current tumor volume.
+
+$$
+\frac{dV}{dt}=c\cdot V
+$$
+
+### d. Mendelsohn growth
+
+Describes tumor growth using a power-law relationship.
+
+$$
+\frac{dV}{dt}=c\cdot V^d
+$$
+
+### e. Exponential flattening growth
+
+Assumes that tumor growth slows down as the tumor volume approaches 
+a maximum.
+
+$$
+\frac{dV}{dt}=c\cdot(V_{\max}-V)
+$$
+
+### f. Logistic growth 
+
+Describes growth that initially accelerates but gradually 
+slows down as the tumor approaches its maximum volume. 
+
+$$
+\frac{dV}{dt}=c\cdot V\cdot(V_{\max}-V)
+$$
 
 ## 6. Methods
 
@@ -65,6 +122,19 @@ This makes it essential for bioinformatics to understand and be able to apply su
 ### c. Runge-Kutta methods
 
 ## 7. Optimization
+
+The `optimization()` method estimates model parameters using a Random 
+Search algortihm. It adjusts parameters to minimize the Mean Squared 
+Error (MSE) between the observed tumor volumes and the model predictions. 
+
+Optimization is performed independently for each treatment group. 
+The method supports different growth models and ODE-solving methods. 
+
+The results, with an example run in the `usecase.ipynb`, include:
+
+* Optimized model parameters
+* MSE values 
+* Visualizations
 
 ## 8. Model-comparing
 
