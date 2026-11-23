@@ -126,7 +126,7 @@ C:\Users\Joris\OneDrive - Hanze\Bio-informatica\J3\P2\Casus A\case1_modelleren\m
   ys[i + 1] = V + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
 ```
 
-Gezien het nu al laat is ga ik er morgen mee bezig
+Gezien het nu al laat is, ga ik er morgen mee bezig
 
 ## 23-nov-2026
 
@@ -140,6 +140,10 @@ Ik ga paar vangnetten toevoegen in de code, om dit soort van errors te voorkomen
 Verassend genoeg was een kleine fix genoeg voor de meerdere errors.
 Ik heb in `_solve_ode` een check toegevoegd wat kijkt of vars np.infinite worden of groter dan een belachelijk groot getal.
 Deze fix heeft in een keer de 5 verschillende errors opgelost, chill.
+
+### Installation
+
+Ik heb een requirements.txt toegevoegd, en een installatie guide toegevoegd aan de README.
 
 ### Jupyter notebook bijwerken:
 

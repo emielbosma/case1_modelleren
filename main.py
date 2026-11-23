@@ -1,8 +1,8 @@
-import matplotlib as mpl
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt # pip install -r requirements.txt from git root
 import pandas as pd
 import numpy as np
-import math
+
+import math # Native packages, no install required.
 from random import gauss
 
 def load_tumordata(filepath):

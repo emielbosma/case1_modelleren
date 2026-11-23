@@ -48,6 +48,20 @@ This makes it essential for bioinformatics to understand and be able to apply su
 
 ## 4. Installation & Requirements
 
+How to install this repository correctly:
+
+1. To install this git repository, go to the folder you want to pase this git repo in;
+2. Open the console in that folder;
+3. Run the console command `git clone https://github.com/emielbosma/case1_modelleren.git`;
+
+This project requires python version 3 or higher.
+If not done before, download python from the [official website](https://www.python.org/downloads/), or if you use microsoft go to microsoft store and search for python.
+
+This project uses the python libraries matplotlib, numpy and pandas.
+
+4. Run in the same console as before the console command `pip install -r requirements.txt`.
+
+
 ## 5. Models
 
 ### a. SIR-model
