@@ -432,7 +432,7 @@ class DynamicModelling:
             # Starting params
             means = data.groupby(ground)[y_name].mean()
             t_mean = means.index.values
-            y_mean = means.values
+            y_mean = means.values.copy()
             y0 = max(y_mean[0], 1e-2)  # Once again; a very bad fix for divide by zero
             y_mean[0] = y0
 
