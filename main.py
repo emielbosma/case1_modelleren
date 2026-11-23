@@ -360,25 +360,27 @@ class DynamicModelling:
         ys = np.empty(len(ts))
         ys[0] = y0
 
-        for i in range(len(ts) - 1):
-            t, V = ts[i], ys[i]
-            if method == "Euler":
-                ys[i + 1] = V + h * f(t, V)
-            elif method == "Heun":
-                k1 = f(t, V)
-                k2 = f(t + h, V + h * k1)
-                ys[i + 1] = V + h / 2 * (k1 + k2)
-            elif method == "Runge-Kutta":
-                k1 = f(t, V)
-                k2 = f(t + h / 2, V + h / 2 * k1)
-                k3 = f(t + h / 2, V + h / 2 * k2)
-                k4 = f(t + h, V + h * k3)
-                ys[i + 1] = V + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
-            else:
-                raise ValueError("method must be 'Euler', 'Heun' or 'Runge-Kutta'")
-            # Stop as soon as the solution becomes unstable
-            # if not np.isfinite(ys[i + 1]) or abs(ys[i + 1]) > 1e12:
-            #     return np.full(len(t_eval), np.nan)
+        with np.errstate(over="ignore", invalid="ignore"):
+            for i in range(len(ts) - 1):
+                t, V = ts[i], ys[i]
+                if method == "Euler":
+                    ys[i + 1] = V + h * f(t, V)
+                elif method == "Heun":
+                    k1 = f(t, V)
+                    k2 = f(t + h, V + h * k1)
+                    ys[i + 1] = V + h / 2 * (k1 + k2)
+                elif method == "Runge-Kutta":
+                    k1 = f(t, V)
+                    k2 = f(t + h / 2, V + h / 2 * k1)
+                    k3 = f(t + h / 2, V + h / 2 * k2)
+                    k4 = f(t + h, V + h * k3)
+                    ys[i + 1] = V + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+                else:
+                    raise ValueError("method must be 'Euler', 'Heun' or 'Runge-Kutta'")
+
+                # Stop as soon as the solution becomes unstable
+                if not np.isfinite(ys[i + 1]) or abs(ys[i + 1]) > 1e12:
+                    return np.full(len(t_eval), np.nan)
 
         return np.interp(t_eval, ts, ys)
 

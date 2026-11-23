@@ -129,3 +129,17 @@ C:\Users\Joris\OneDrive - Hanze\Bio-informatica\J3\P2\Casus A\case1_modelleren\m
 Gezien het nu al laat is ga ik er morgen mee bezig
 
 ## 23-nov-2026
+
+Vandaag ga ik bezig met de puntjes op de i te zetten voor het project, beginnend met dat de code momenteel overflow errors geeft.
+
+### Overflow errors:
+
+De overflows komen waarschijnlijk uit `optimization`, waar random.gauss instaat wat ruis toevoegd aan de parameters. Daardoor worden af en toe combinations geprobeerd waarbij de oplossing van de ODE naar oneindig gaat.
+Ik ga paar vangnetten toevoegen in de code, om dit soort van errors te voorkomen.
+
+Verassend genoeg was een kleine fix genoeg voor de meerdere errors.
+Ik heb in `_solve_ode` een check toegevoegd wat kijkt of vars np.infinite worden of groter dan een belachelijk groot getal.
+Deze fix heeft in een keer de 5 verschillende errors opgelost, chill.
+
+### Jupyter notebook bijwerken:
+
