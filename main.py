@@ -274,13 +274,13 @@ class DynamicModelling:
             ys[0] = y[0]
             return f, ts, ys
 
-        def euler_model(data, y_name, h=1):
+        def euler_method(data, y_name, h=1):
             f, ts, ys = prepare(data, y_name, h)
             for i in range(len(ts) - 1):
                 ys[i + 1] = ys[i] + h * f(ts[i], ys[i])
             return ts, ys
 
-        def heun_model(data, y_name, h=1):
+        def heun_method(data, y_name, h=1):
             f, ts, ys = prepare(data, y_name, h)
             for i in range(len(ts) - 1):
                 k1 = f(ts[i], ys[i])
@@ -288,7 +288,7 @@ class DynamicModelling:
                 ys[i + 1] = ys[i] + h / 2 * (k1 + k2)
             return ts, ys
 
-        def rungekutta_model(data, y_name, h=1):
+        def rungekutta_method(data, y_name, h=1):
             f, ts, ys = prepare(data, y_name, h)
             for i in range(len(ts) - 1):
                 k1 = f(ts[i], ys[i])
@@ -303,11 +303,11 @@ class DynamicModelling:
             output = {}
             for reference in references:
                 if model == 'Euler':
-                    ts_model, output[reference] = euler_model(group_data, reference)
+                    ts_model, output[reference] = euler_method(group_data, reference)
                 elif model == 'Heun':
-                    ts_model, output[reference] = heun_model(group_data, reference)
+                    ts_model, output[reference] = heun_method(group_data, reference)
                 elif model == 'Runge-Kutta':
-                    ts_model, output[reference] = rungekutta_model(group_data, reference)
+                    ts_model, output[reference] = rungekutta_method(group_data, reference)
 
             group_df = pd.DataFrame(output)
             group_df.insert(0, ground, ts_model)

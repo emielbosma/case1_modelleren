@@ -145,5 +145,19 @@ Deze fix heeft in een keer de 5 verschillende errors opgelost, chill.
 
 Ik heb een requirements.txt toegevoegd, en een installatie guide toegevoegd aan de README.
 
+### README.MD bijwerken
+
+Als eerst heb ik de `content of this repository` uitgeschreven.
+
+Daarna heb ik de wiskundige modellen uitgeschreven o.b.v. artikellen die ik heb gevonden of de wikipedia pagina's van de modellen.
+Ook heb ik, als dat van toepassing is, onze aangepaste formule erbij gezet.
+
+Toen ging ik bezig met het uitschrijven van de methodes. Ook dit heb ik gedaan o.b.v. de wikipedia pagina's van de methodes. Ook heb ik een code snippet toegevoegd per methode om te laten zien hoe we het toepassen. In runge-kutta hebben we het eindresultaat anders berekend dan hoe het in de wikipedia pagina staat, dus ik heb ook de wiskundige formule uitgeschreven voor hoe we dat doen.
+
+Als laatst heb ik de manier uitgewerkt hoe we de kwaliteit berekenen van de verschillende gefitte modellen.
+Gezien we de corrected AIC formule anders hebben gedaan, heb ik ook de berekening hierachter uitgewerkt.
+
+Gezien ik online niet een uitgewerkte handleiding kon vinden voor markdown wiskundige formules, heb ik chatgpt om hulp gevraagd om hoe markdown werkt in dat opzicht. Ik heb zelf de formules uitgewerkt en getypt.
+
 ### Jupyter notebook bijwerken:
 
