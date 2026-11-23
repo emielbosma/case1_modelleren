@@ -93,3 +93,39 @@ Ik heb gevraagd om de groeimodellen uit de TODO in `mathematical_methods` toe te
 
 ---
 
+## 22-nov-2026
+
+### Workshop 3 & 4: optimalisatie en modelvergelijking
+
+Vandaag heb ik `plot_optimization` aangepast zodat alle wiskundige modellen uit `mathematical_methods` erop gefit kunnen worden, in plaats van alleen het lineaire model.
+Dit was nodig omdat `model_comparison` alle modellen achter elkaar moet fitten en vergelijken.
+
+Wat ik heb aangepast:
+1. Ik heb een hulpfunctie `_solve_ode` toegevoegd die de differentiaalvergelijking oplost met Euler, Heun of Runge-Kutta.
+2. `plot_optimization` neemt nu een `model` (bijv. 'gompertz') en een `method` (de ODE-solver) als input. Per behandelgroep wordt het model opgelost en de MSE berekend tegen alle meetpunten.
+3. De startwaarden komen uit `estimate_params`, berekend op het gemiddelde volume per tijdstip. Het startvolume is het gemiddelde op de eerste dag.
+4. De random search uit Workshop 3 is gebleven, maar de stapgrootte is nu relatief per parameter. Met een vaste sigma van 0.01 werkte het niet, omdat `c` rond de 0.05 ligt en `Vmax` rond de 1000. Er is ook een maximum aantal pogingen toegevoegd zodat hij niet eindeloos doorloopt.
+5. Er wordt alleen nog een figuur gemaakt als `plot=True`, anders kregen we bij de modelvergelijking 11 lege figuren.
+6. De functie geeft nu een dict terug met de parameters en MSE per groep, de totale SSE, het aantal datapunten (n) en het aantal parameters (k).
+
+Ook heb ik dus de functie `model_comparison` gemaakt. 
+De functie loopt over elke type wiskundige model, runt optimization voor dat model, berekent de AIC AICc en BIC voor dat model en geeft dan een df waarin alle modellen worden vergelijkt.
+
+Echter geeft het momenteel wel errors:
+
+```error
+C:\Users\Joris\OneDrive - Hanze\Bio-informatica\J3\P2\Casus A\case1_modelleren\main.py:186: RuntimeWarning: overflow encountered in scalar power
+  "mendelsohn": lambda t, V: c * pos(V) ** d,
+C:\Users\Joris\OneDrive - Hanze\Bio-informatica\J3\P2\Casus A\case1_modelleren\main.py:416: RuntimeWarning: overflow encountered in square
+  mse = np.mean((y - y_model) ** 2)
+C:\Users\Joris\OneDrive - Hanze\Bio-informatica\J3\P2\Casus A\case1_modelleren\main.py:190: RuntimeWarning: overflow encountered in scalar multiply
+  "allee": lambda t, V: c * (V - Vmin) * (Vmax - V),
+C:\Users\Joris\OneDrive - Hanze\Bio-informatica\J3\P2\Casus A\case1_modelleren\main.py:416: RuntimeWarning: overflow encountered in square
+  mse = np.mean((y - y_model) ** 2)
+C:\Users\Joris\OneDrive - Hanze\Bio-informatica\J3\P2\Casus A\case1_modelleren\main.py:376: RuntimeWarning: overflow encountered in scalar multiply
+  ys[i + 1] = V + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+```
+
+Gezien het nu al laat is ga ik er morgen mee bezig
+
+## 23-nov-2026
