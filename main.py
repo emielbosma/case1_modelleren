@@ -462,9 +462,9 @@ class DynamicModelling:
 
             fitted_params[group] = best
             fitted_mse[group] = mse
-            sse_total = mse * len(y)
-            n_total = len(y)
-            k_total = len(best)
+            sse_total += mse * len(y)
+            n_total += len(y)
+            k_total += len(best)
 
             if plot: # Added plot behind an if because I was tired of all those plots
                 t_fine = np.linspace(x.min(), x.max(), 200)

@@ -136,15 +136,6 @@ $$
 
 ### f. Logistic growth 
 
-Describes growth that initially accelerates but gradually 
-slows down as the tumor approaches its maximum volume. 
-
-$$
-\frac{dV}{dt}=c\cdot V\cdot(V_{\max}-V)
-$$
-
-### f. Logistisch
-
 A logistic function is a common S-shaped curve with the following equation:
 
 $$ f(x) = \frac{L}{1 + e^{-k(x - x_0)}} $$
