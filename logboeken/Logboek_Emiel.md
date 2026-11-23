@@ -173,3 +173,38 @@ We gebruiken nu `V(t) = V(0)e^bt`. In het model dat we gebruiken
 wordt alleen de b-parameter geoptimaliseerd. Het is lastig om 
 tijd de optimaliseren, dus we zouden eventueel morgen nog V(0) kunnen 
 proberen te optimaliseren. Voor nu ben ik eerst blij met dit eindresultaat.
+
+
+### Zondag 22 november
+
+Ik ben vandaag bezig geweest met de start van de use case demonstration voor 
+deze casus. Ik heb vandaag het format bepaald, en het SIR-model in het Engels 
+verwerkt met codevoorbeelden en interpretatie van de plots. Ik heb 
+de code uit de `main.py` geïmporteerd naar het Jupyter notebook. Zo kan ik 
+de achterliggende code gebruiken om plots in het Use case bestand verwerken.
+
+Morgen ga ik verder met de use case voor Workshop 3. Ik wil dat op dezelfde 
+format gaan doen als het SIR-model. Dit doen we om het simpel te houden, 
+en dat de eindgebruiker dan een goed beeld heeft van hoe je 
+met deze modellen tewerk kunt gaan. 
+
+### Maandag 23 november: afronding
+
+Ik heb zonet de use case afgemaakt voor workshop 3. Ik heb meerdere modellen
+ gebruikt om tot een juiste interpretatie te komen van de geobserveerde 
+ tumorgroeidata tov de voorspelde. Met simpele code blokken en juiste 
+ omschrijvingen denk ik dat een eindgebruiker hier 
+ goed mee op weg kan.
+
+ We zijn aan het einde gekomen van deze eerste casus. De samenwerking 
+ met Joris verliep goed, met een erg fijne communicatie en werkstijl. 
+
+ Voor de rest ga ik vandaag de puntjes op de i zetten voor dit project. 
+ Dit bestaat uit: 
+
+ - def main() verwijderen
+ - testen
+ - conclusie formuleren met Joris
+ - inleveren'
+
+ Bedankt voor het lezen van dit logboek en tot ziens!
